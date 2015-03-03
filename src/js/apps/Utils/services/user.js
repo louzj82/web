@@ -1,6 +1,6 @@
 var Buffer = require('buffer/').Buffer;
 
-module.exports = /*@ngInject*/function($q, $rootScope, $state, $timeout, $window, $translate, consts, LavaboomAPI, co, crypto, cryptoKeys, loader) {
+module.exports = /*@ngInject*/function($q, $rootScope, $state, $timeout, $window, $http, $translate, consts, LavaboomAPI, co, crypto, cryptoKeys, loader) {
 	const self = this;
 
 	var translations = {};
@@ -10,6 +10,7 @@ module.exports = /*@ngInject*/function($q, $rootScope, $state, $timeout, $window
 
 	this.name = '';
 	this.email = '';
+	this.altEmail = '';
 	this.nameEmail = '';
 
 	// information about user from API
@@ -81,6 +82,7 @@ module.exports = /*@ngInject*/function($q, $rootScope, $state, $timeout, $window
 
 		var res = yield LavaboomAPI.accounts.get('me');
 
+		self.altEmail = res.body.user.alt_email;
 		self.settings = res.body.user.settings ? res.body.user.settings : {};
 		$rootScope.$broadcast('user-settings');
 
@@ -178,6 +180,32 @@ module.exports = /*@ngInject*/function($q, $rootScope, $state, $timeout, $window
 			}
 		});
 	};
+
+	const sendyRequest = (name, params) => co(function *(){
+		return yield $http({
+			method: 'POST',
+			url: `${consts.SENDY_API_URI}/${name}`,
+			params: params,
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		});
+	});
+
+	this.subscribeToNews = () => co(function *(){
+		yield sendyRequest('subscribe', {
+			name: self.name,
+			email: self.altEmail,
+			list: consts.SUBSCRIPTION_LIST_ID
+		});
+	});
+
+	this.unSubscribeFromNews = () => co(function *(){
+		yield sendyRequest('unsubscribe', {
+			email: self.altEmail,
+			list: consts.SUBSCRIPTION_LIST_ID
+		});
+	});
 
 	this.removeTokens = () => {
 		delete localStorage.lavaboomToken;

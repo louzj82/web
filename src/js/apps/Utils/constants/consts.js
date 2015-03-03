@@ -19,5 +19,7 @@ module.exports = {
 	INBOX_EMAILS_CACHE_TTL: 60 * 10 * 1000,
 	SET_READ_AFTER_TIMEOUT: 3000,
 	KEYS_BACKUP_README: 'https://lavaboom.com/placeholder/help/backup-file',
-	POPUP_AUTO_HIDE_DELAY: 500
+	POPUP_AUTO_HIDE_DELAY: 500,
+	SENDY_API_URI: 'https://technical.lavaboom.com',
+	SUBSCRIPTION_LIST_ID: 'E63FR2892iUh78925HheyZ5PJg'
 };

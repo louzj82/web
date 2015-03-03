@@ -71,14 +71,17 @@ module.exports = /*@ngInject*/($rootScope, $scope, $interval, $translate, $timeo
         if (o === n) return;
 
         if (Object.keys($scope.settings).length > 0) {
-            updateTimeout = $timeout.schedule(updateTimeout, () => {
-                user.update($scope.settings)
-                .then(() => {
-                    $scope.status = 'saved!';
-                })
-                .catch(() => {
-                    $scope.status = 'ops...';
-                });
+            updateTimeout = $timeout.schedule(updateTimeout, function *(){
+				try {
+					yield user.update($scope.settings);
+					if ($scope.settings.isSubscribedToNews)
+						user.subscribeToNews();
+					else
+						user.unSubscribeFromNews();
+					$scope.status = 'saved!';
+				} catch (err) {
+					$scope.status = 'ops...';
+				}
             }, 1000);
         }
     }, true);

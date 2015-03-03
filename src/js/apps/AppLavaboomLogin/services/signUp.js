@@ -16,8 +16,12 @@ module.exports = /*@ngInject*/function (LavaboomAPI, co, user) {
 			altEmail: altEmail,
 			isNews: isNews
 		};
+		user.altEmail = altEmail;
 
 		return co(function * (){
+			if (isNews)
+				yield user.subscribeToNews();
+
 			var res = yield LavaboomAPI.accounts.create.register({
 				username: transformedUsername,
 				alt_email: altEmail
@@ -65,6 +69,9 @@ module.exports = /*@ngInject*/function (LavaboomAPI, co, user) {
 				});
 
 			yield user.update(settings);
+
+			if (user.settings.isSubscribedToNews)
+				yield user.subscribeToNews();
 		});
 	};
 };

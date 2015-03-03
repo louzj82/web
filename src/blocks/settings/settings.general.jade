@@ -77,6 +77,14 @@
 						ui-select-match {{$select.selected.name}}
 						ui-select-choices(repeat='item in notImplemented')
 							span(ng-click='item.selected=item', ng-bind='item.name')
+		h4 {{'MAIN.SETTINGS.GENERAL.TITLE_SUBSCRIBE' | translate}}
+		ul.list-group
+			li.list-group-item
+				label {{'MAIN.SETTINGS.GENERAL.LB_SUBSCRIBE' | translate}}
+				.control
+					label.switch
+						input(type='checkbox', ng-model="settings.isSubscribedToNews")
+						i
 		h4 {{'MAIN.SETTINGS.GENERAL.TITLE_KEYBOARD_SHORTCUTS' | translate}}
 		ul.list-group
 			li.list-group-item
@@ -85,10 +93,6 @@
 					label.switch
 						input(type='checkbox', ng-model="settings.isHotkeyEnabled")
 						i
-		br
-		ul.list-group(ng-show="status")
-			li.list-group-item
-				label(ng-bind="status")
 		h4 {{'MAIN.SETTINGS.GENERAL.TITLE_CONTACTS' | translate}}
 		ul.list-group
 			li.list-group-item
@@ -101,3 +105,7 @@
 						ui-select-choices(repeat='item in sortBy')
 							span(ng-click='item.selected=item', ng-bind='item.name')
 							span.dropdown-icon(ng-class='item.icon')
+		br
+		ul.list-group(ng-show="status")
+			li.list-group-item
+				label(ng-bind="status")
