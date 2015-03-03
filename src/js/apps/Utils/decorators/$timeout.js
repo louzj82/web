@@ -1,8 +1,11 @@
-module.exports = /*@ngInject*/($delegate, $q) => {
+module.exports = /*@ngInject*/($delegate, $q, $injector) => {
 	$delegate.schedule = (timeoutVariable, action, timeout, invokeApply) => {
+		const co = $injector.get('co');
 		if (timeoutVariable)
 			$delegate.cancel(timeoutVariable);
-		return $delegate(action, timeout, invokeApply);
+		return $delegate(angular.isGeneratorFunction(action) ? () => {
+			co(action);
+		} : action, timeout, invokeApply);
 	};
 
 	$delegate.schedulePromise = (timeoutVariable, action, timeout, invokeApply) => {

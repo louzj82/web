@@ -1,4 +1,6 @@
+require('../helpers/angularES6');
 window.coJS = require('co');
+
 let AngularApplication = require('../helpers/angularApplication');
 
 var bulkRequire = require('bulk-require');
