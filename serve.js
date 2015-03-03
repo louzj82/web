@@ -1,5 +1,7 @@
-var path		= require('path'),
+var fs			= require('fs'),
+	path		= require('path'),
 	http		= require('http'),
+	https		= require('https'),
 	express		= require('express'),
 	staticGzip	= require('connect-gzip-static'),
 	livereload	= require('connect-livereload'),
@@ -25,8 +27,18 @@ module.exports = function () {
 	// serve content, search for pre-compiled gzip with gracefully fallback to plaintext
 	app.use(staticGzip(paths.output));
 
+	var options = null;
+	try {
+		options = {
+			key: fs.readFileSync('key.pem'),
+			cert: fs.readFileSync('cert.pem')
+		};
+	} catch (err) {
+		console.log('No certificate found - starting http mode...', err);
+	}
+
 	// woa!
-	var server = http.Server(app);
+	var server = options ? https.createServer(options, app) : http.Server(app);
 	server.listen(config.listenPort, config.listenAddress);
 
 	console.log('Serving content from ' + path.resolve(__dirname, paths.output));
