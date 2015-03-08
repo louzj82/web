@@ -181,7 +181,7 @@
 
 [LOGIN.AUTH]
 	BTN_GO_TO_MY_INBOX = "Go to my Inbox"
-	BTN_NO_ACCOUNT_YET = "No Account Yet? Sign up Here!"
+	BTN_NO_ACCOUNT_YET = "No account yet? Sign up here!"
 
 # Generic error messages for Lavaboom REST API
 [LAVABOOM.API.ERROR]
